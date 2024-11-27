@@ -5,6 +5,7 @@ class PetDescScreen extends StatelessWidget {
   final PetModel dog;
 
   const PetDescScreen({super.key, required this.dog});
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -26,26 +27,38 @@ class PetDescScreen extends StatelessWidget {
                 ),
                 child: Row(
                   children: [
-                    Icon(Icons.chevron_left, color: Colors.black),
-                    Text("Voltar")
+                    const Icon(Icons.chevron_left, color: Colors.black),
+                    const Text("Voltar"),
                   ],
                 ),
               ),
-              // Imagem ocupando uma proporção menor da tela
-              SizedBox(
-                height: 380,
-                width: double.infinity,
-                child: Image.asset(
-                  "assets/images/HomeDog.png",
-                  fit: BoxFit.cover,
+              const SizedBox(height: 10),
+              // Imagem circular do pet
+              Center(
+                child: ClipOval(
+                  child: SizedBox(
+                    height: 150,
+                    width: 150,
+                    child: Image.network(
+                      dog.imageUrl, // Supondo que o PetModel tenha o campo imageUrl
+                      fit: BoxFit.cover,
+                      errorBuilder: (context, error, stackTrace) {
+                        return const Icon(
+                          Icons.pets,
+                          size: 50,
+                          color: Colors.grey,
+                        );
+                      },
+                    ),
+                  ),
                 ),
               ),
-              const SizedBox(height: 10),
+              const SizedBox(height: 20),
               // Nome do animal centralizado e em negrito
-              const Center(
+              Center(
                 child: Text(
-                  "Nome do Animal",
-                  style: TextStyle(
+                  dog.name, // Exibe o nome do animal
+                  style: const TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
                   ),
@@ -56,87 +69,9 @@ class PetDescScreen extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  // Primeiro quadrado: Idade
-                  Container(
-                    width: 90, // Ajuste da largura
-                    padding: const EdgeInsets.all(10),
-                    decoration: BoxDecoration(
-                      color: Colors.lightBlue.shade50,
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: const Column(
-                      children: [
-                        Text(
-                          "Idade",
-                          style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        SizedBox(height: 3),
-                        Text(
-                          "2 anos",
-                          style: TextStyle(
-                            fontSize: 14,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  // Segundo quadrado: Peso
-                  Container(
-                    width: 90,
-                    padding: const EdgeInsets.all(10),
-                    decoration: BoxDecoration(
-                      color: Colors.lightBlue.shade50,
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: const Column(
-                      children: [
-                        Text(
-                          "Peso",
-                          style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        SizedBox(height: 3),
-                        Text(
-                          "10kg",
-                          style: TextStyle(
-                            fontSize: 14,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  // Terceiro quadrado: Sexo
-                  Container(
-                    width: 90,
-                    padding: const EdgeInsets.all(10),
-                    decoration: BoxDecoration(
-                      color: Colors.lightBlue.shade50,
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: const Column(
-                      children: [
-                        Text(
-                          "Sexo",
-                          style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        SizedBox(height: 3),
-                        Text(
-                          "Macho",
-                          style: TextStyle(
-                            fontSize: 14,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
+                  _buildInfoBox("Idade", "${dog.age} anos"),
+                  _buildInfoBox("Peso", "${dog.weight} kg"),
+                  _buildInfoBox("Sexo", dog.gender),
                 ],
               ),
               const SizedBox(height: 20),
@@ -150,9 +85,9 @@ class PetDescScreen extends StatelessWidget {
               ),
               const SizedBox(height: 8),
               // Descrição do animal
-              const Text(
-                "Este é um cão muito amigável e energético. Adora brincar e correr no parque. Está vacinado e pronto para adoção.",
-                style: TextStyle(
+              Text(
+                dog.description, // Exibe a descrição do pet
+                style: const TextStyle(
                   fontSize: 14,
                 ),
               ),
@@ -169,8 +104,9 @@ class PetDescScreen extends StatelessWidget {
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.black,
                         padding: const EdgeInsets.symmetric(
-                            horizontal: 20,
-                            vertical: 10), // Mantido o tamanho do padding
+                          horizontal: 20,
+                          vertical: 10,
+                        ), // Mantido o tamanho do padding
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(30),
                         ),
@@ -196,14 +132,45 @@ class PetDescScreen extends StatelessWidget {
                         borderRadius: BorderRadius.circular(30),
                       ),
                     ),
-                    child:
-                        const Icon(Icons.favorite_outline, color: Colors.white),
+                    child: const Icon(
+                      Icons.favorite_outline,
+                      color: Colors.white,
+                    ),
                   ),
                 ],
               ),
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _buildInfoBox(String title, String value) {
+    return Container(
+      width: 90, // Ajuste da largura
+      padding: const EdgeInsets.all(10),
+      decoration: BoxDecoration(
+        color: Colors.lightBlue.shade50,
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: Column(
+        children: [
+          Text(
+            title,
+            style: const TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          const SizedBox(height: 3),
+          Text(
+            value,
+            style: const TextStyle(
+              fontSize: 14,
+            ),
+          ),
+        ],
       ),
     );
   }

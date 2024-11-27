@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pet_adopt/model/pet_model.dart';
 import 'package:pet_adopt/view/pet_desc_screen.dart';
-import 'package:pet_adopt/view/pets_screen.dart';
 
 class PetCardScreen extends StatelessWidget {
   const PetCardScreen({
@@ -27,8 +26,10 @@ class PetCardScreen extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Padding(
-            padding: const EdgeInsets.only(top: 5.0),
+          ClipRRect(
+            borderRadius: const BorderRadius.vertical(
+              top: Radius.circular(10),
+            ),
             child: Image.network(
               dog.images.isNotEmpty
                   ? dog.images[0]
@@ -41,6 +42,7 @@ class PetCardScreen extends StatelessWidget {
           const SizedBox(height: 8),
           Text(
             "${dog.name}, ${dog.age} anos", // Exibindo nome e idade
+            textAlign: TextAlign.center,
             style: const TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.bold,

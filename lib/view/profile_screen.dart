@@ -11,6 +11,11 @@ class ProfileScreen extends StatelessWidget {
     return prefs.getString('auth_token'); // Recupera o token salvo
   }
 
+  Future<String?> _getEmail() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getString('user_email'); // Recupera o email salvo
+  }
+
   Future<List<dynamic>> fetchUserPets() async {
     final token = await _getToken();
     if (token == null) {
@@ -37,7 +42,7 @@ class ProfileScreen extends StatelessWidget {
         appBar: AppBar(
           title: const Text("Perfil de Usuário"),
           centerTitle: true,
-          automaticallyImplyLeading: false, // Remove o botão de voltar padrão
+          automaticallyImplyLeading: false,
         ),
         body: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20.0),
@@ -47,7 +52,7 @@ class ProfileScreen extends StatelessWidget {
               // Botão Voltar estilizado
               ElevatedButton(
                 onPressed: () {
-                  Navigator.of(context).pop(); // Voltar à tela anterior
+                  Navigator.of(context).pop();
                 },
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
@@ -61,10 +66,10 @@ class ProfileScreen extends StatelessWidget {
                   ],
                 ),
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.transparent, // Fundo transparente
-                  shadowColor: Colors.transparent, // Remove a sombra
-                  elevation: 0, // Remove elevação
-                  padding: EdgeInsets.zero, // Remove padding
+                  backgroundColor: Colors.transparent,
+                  shadowColor: Colors.transparent,
+                  elevation: 0,
+                  padding: EdgeInsets.zero,
                 ),
               ),
               const Spacer(flex: 2),
@@ -83,21 +88,34 @@ class ProfileScreen extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 15),
-                    const SizedBox(height: 10),
-                    const Text(
-                      "example@example.com",
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: Colors.black54,
-                      ),
+                    FutureBuilder<String?>(
+                      future: _getEmail(),
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return const CircularProgressIndicator();
+                        } else if (snapshot.hasError || snapshot.data == null) {
+                          return const Text(
+                            "Erro ao carregar e-mail",
+                            style: TextStyle(
+                              fontSize: 16,
+                              color: Colors.red,
+                            ),
+                          );
+                        }
+                        return Text(
+                          snapshot.data!,
+                          style: const TextStyle(
+                            fontSize: 16,
+                            color: Colors.black54,
+                          ),
+                        );
+                      },
                     ),
                   ],
                 ),
               ),
               const SizedBox(height: 30),
-              // Descrição do usuário
-              const SizedBox(height: 10),
-
               const Spacer(flex: 2),
               const Text(
                 "Pets Cadastrados",

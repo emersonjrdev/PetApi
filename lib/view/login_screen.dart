@@ -27,9 +27,10 @@ class _LoginScreenState extends State<LoginScreen> {
       final token = await _authController.loginUser(email, password);
 
       if (token != null) {
-        // Armazenar o token com SharedPreferences
+        // Armazenar o token e o email com SharedPreferences
         SharedPreferences prefs = await SharedPreferences.getInstance();
         prefs.setString('token', token); // Armazenando o token
+        prefs.setString('user_email', email); // Armazenando o e-mail
 
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text("Login bem-sucedido!")),

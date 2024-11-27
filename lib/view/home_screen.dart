@@ -30,7 +30,7 @@ class HomeScreen extends StatelessWidget {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Text(
-                        "Pular",
+                        "Login",
                         style: TextStyle(
                           color: Colors.black,
                           fontSize: 16,
@@ -47,12 +47,12 @@ class HomeScreen extends StatelessWidget {
               ),
               const SizedBox(height: 20),
               Image.asset(
-                "assets/images/patinha.png",
+                "assets/images/pet.png",
                 height: 250,
               ),
               const SizedBox(height: 20),
               const Text(
-                "PetAdopt",
+                "Adote seu Aumigo!",
                 style: TextStyle(
                   fontSize: 28,
                   fontWeight: FontWeight.bold,
