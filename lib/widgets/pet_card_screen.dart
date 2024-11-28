@@ -12,75 +12,54 @@ class PetCardScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: 150,
-      height: 300,
-      margin: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 5.0),
-      decoration: BoxDecoration(
-        border: Border.all(
-          width: 1,
-          color: Colors.black,
+    return InkWell(
+      onTap: () {
+        // Navegação ao clicar no card
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (context) => PetDescScreen(dog: dog),
+          ),
+        );
+      },
+      borderRadius: BorderRadius.circular(10), // Efeito visual ao clicar
+      child: Container(
+        width: 150,
+        height: 300,
+        margin: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 5.0),
+        decoration: BoxDecoration(
+          border: Border.all(
+            width: 1,
+            color: Colors.black,
+          ),
+          borderRadius: BorderRadius.circular(10),
         ),
-        borderRadius: BorderRadius.circular(10),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          ClipRRect(
-            borderRadius: const BorderRadius.vertical(
-              top: Radius.circular(10),
-            ),
-            child: Image.network(
-              dog.images.isNotEmpty
-                  ? dog.images[0]
-                  : "assets/images/default.png", // Exibe a primeira imagem
-              fit: BoxFit.cover,
-              width: double.infinity,
-              height: 130,
-            ),
-          ),
-          const SizedBox(height: 8),
-          Text(
-            "${dog.name}, ${dog.age} anos", // Exibindo nome e idade
-            textAlign: TextAlign.center,
-            style: const TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          const SizedBox(height: 8),
-          Padding(
-            padding: const EdgeInsets.only(bottom: 8.0),
-            child: SizedBox(
-              height: 30,
-              child: ElevatedButton(
-                onPressed: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => PetDescScreen(
-                          dog: dog), // Passando o dog para a tela de detalhes
-                    ),
-                  );
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.grey,
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30),
-                  ),
-                ),
-                child: const Text(
-                  "Ver",
-                  style: TextStyle(
-                    fontSize: 12,
-                    color: Colors.white,
-                  ),
-                ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            ClipRRect(
+              borderRadius: const BorderRadius.vertical(
+                top: Radius.circular(10),
+              ),
+              child: Image.network(
+                dog.images.isNotEmpty
+                    ? dog.images[0]
+                    : "assets/images/default.png", // Exibe a primeira imagem
+                fit: BoxFit.cover,
+                width: double.infinity,
+                height: 130,
               ),
             ),
-          ),
-        ],
+            const SizedBox(height: 8),
+            Text(
+              "${dog.name}, ${dog.age} anos", // Exibindo nome e idade
+              textAlign: TextAlign.center,
+              style: const TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

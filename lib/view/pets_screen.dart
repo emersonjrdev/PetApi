@@ -62,7 +62,11 @@ class _PetsScreenState extends State<PetsScreen> {
                           builder: (context) => AddPetScreen()));
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.grey,
+                      backgroundColor: Colors.transparent,
+                      shadowColor: Colors.transparent,
+                      elevation: 0,
+                      side: const BorderSide(
+                          color: Colors.grey), // Contorno cinza
                       padding: const EdgeInsets.symmetric(
                           horizontal: 20, vertical: 10),
                       shape: RoundedRectangleBorder(
@@ -71,7 +75,7 @@ class _PetsScreenState extends State<PetsScreen> {
                     ),
                     child: const Text(
                       "Adicionar para adoção",
-                      style: TextStyle(color: Colors.white),
+                      style: TextStyle(color: Colors.grey), // Texto cinza
                     ),
                   ),
                   ElevatedButton(
@@ -80,7 +84,11 @@ class _PetsScreenState extends State<PetsScreen> {
                           builder: (context) => ProfileScreen()));
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.grey,
+                      backgroundColor: Colors.transparent,
+                      shadowColor: Colors.transparent,
+                      elevation: 0,
+                      side: const BorderSide(
+                          color: Colors.grey), // Contorno cinza
                       padding: const EdgeInsets.symmetric(
                           horizontal: 20, vertical: 10),
                       shape: RoundedRectangleBorder(
@@ -91,7 +99,7 @@ class _PetsScreenState extends State<PetsScreen> {
                       children: [
                         Text(
                           "Meus Pets",
-                          style: TextStyle(color: Colors.white),
+                          style: TextStyle(color: Colors.grey), // Texto cinza
                         ),
                         SizedBox(width: 5),
                       ],

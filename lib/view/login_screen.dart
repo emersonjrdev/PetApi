@@ -60,72 +60,81 @@ class _LoginScreenState extends State<LoginScreen> {
           child: Form(
             key: _formKey,
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => const HomeScreen()));
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.transparent,
-                    shadowColor: Colors.transparent,
-                    elevation: 0,
-                    padding: EdgeInsets.zero,
-                  ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Icon(Icons.chevron_left, color: Colors.black),
-                      SizedBox(width: 5),
-                      Text("Voltar", style: TextStyle(color: Colors.black)),
-                    ],
+                // Botão Voltar
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => const HomeScreen()));
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.transparent,
+                      shadowColor: Colors.transparent,
+                      elevation: 0,
+                      padding: EdgeInsets.zero,
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(Icons.chevron_left, color: Colors.black),
+                        SizedBox(width: 5),
+                        Text("Voltar", style: TextStyle(color: Colors.black)),
+                      ],
+                    ),
                   ),
                 ),
-                const Spacer(flex: 4),
-                SizedBox(
-                  width: double.infinity,
-                  child: TextFormField(
-                    controller: _emailController,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return "Por favor, insira um email";
-                      }
-                      return null;
-                    },
-                    decoration: InputDecoration(
-                      hintText: "Digite seu email",
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                        borderSide: BorderSide(
-                            color: Colors.black.withOpacity(0.2), width: 1),
-                      ),
+                const SizedBox(height: 20),
+                // Adicionando imagem acima dos inputs
+                Image.asset(
+                  'assets/images/login.png', // Caminho da imagem
+                  height: 120,
+                  width: 120,
+                  fit: BoxFit.cover,
+                ),
+                const SizedBox(height: 20),
+                // Campo de email
+                TextFormField(
+                  controller: _emailController,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return "Por favor, insira um email";
+                    }
+                    return null;
+                  },
+                  decoration: InputDecoration(
+                    hintText: "Digite seu email",
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                      borderSide: BorderSide(
+                          color: Colors.black.withOpacity(0.2), width: 1),
                     ),
                   ),
                 ),
                 const SizedBox(height: 15),
-                SizedBox(
-                  width: double.infinity,
-                  child: TextFormField(
-                    controller: _passwordController,
-                    obscureText: true,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return "Por favor, insira sua senha";
-                      }
-                      return null;
-                    },
-                    decoration: InputDecoration(
-                      hintText: "Digite sua senha",
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                        borderSide: BorderSide(
-                            color: Colors.black.withOpacity(0.2), width: 1),
-                      ),
+                // Campo de senha
+                TextFormField(
+                  controller: _passwordController,
+                  obscureText: true,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return "Por favor, insira sua senha";
+                    }
+                    return null;
+                  },
+                  decoration: InputDecoration(
+                    hintText: "Digite sua senha",
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                      borderSide: BorderSide(
+                          color: Colors.black.withOpacity(0.2), width: 1),
                     ),
                   ),
                 ),
-                const Spacer(flex: 1),
+                const SizedBox(height: 20),
+                // Botões de Login e Cadastro
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
@@ -143,7 +152,6 @@ class _LoginScreenState extends State<LoginScreen> {
                         style: TextStyle(fontSize: 18, color: Colors.white),
                       ),
                     ),
-                    const Spacer(),
                     ElevatedButton(
                       onPressed: () {
                         Navigator.of(context).push(MaterialPageRoute(
@@ -163,7 +171,6 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                   ],
                 ),
-                const Spacer(flex: 4),
               ],
             ),
           ),

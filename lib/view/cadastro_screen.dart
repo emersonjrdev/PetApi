@@ -3,7 +3,7 @@ import 'package:pet_adopt/view/login_screen.dart';
 import '../controller/user_controller.dart';
 import '../model/user_model.dart';
 
-class CadastroScreen extends StatefulWidget {  
+class CadastroScreen extends StatefulWidget {
   const CadastroScreen({super.key});
 
   @override
@@ -16,39 +16,37 @@ class _CadastroScreenState extends State<CadastroScreen> {
   final _user = UserModel();
 
   final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _confirmpasswordController = TextEditingController();
+  final TextEditingController _confirmpasswordController =
+      TextEditingController();
 
   Future<void> _registerUser() async {
-  if (_formKey.currentState!.validate()) {
-    _formKey.currentState!.save();
+    if (_formKey.currentState!.validate()) {
+      _formKey.currentState!.save();
 
-    print("Senha: '${_passwordController.text}'");
-    print("Confirmação de senha: '${_confirmpasswordController.text}'");
+      if (_passwordController.text.trim() !=
+          _confirmpasswordController.text.trim()) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("As senhas não coincidem!")),
+        );
+        return;
+      }
 
-    if (_passwordController.text.trim() != _confirmpasswordController.text.trim()) {
+      _user.password = _passwordController.text;
+      _user.confirmpassword = _confirmpasswordController.text;
+
+      final message = await _userController.registerUser(_user);
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("As senhas não coincidem!")),
+        SnackBar(content: Text(message)),
       );
-      return;
-    }
 
-    _user.password = _passwordController.text;
-    _user.confirmpassword = _confirmpasswordController.text;
-
-    final message = await _userController.registerUser(_user);
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(message)),
-    );
-
-    if (message == 'Usuário cadastrado com sucesso!') {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => LoginScreen()),  
-      );
+      if (message == 'Usuário cadastrado com sucesso!') {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => const LoginScreen()),
+        );
+      }
     }
   }
-}
-
 
   @override
   Widget build(BuildContext context) {
@@ -64,31 +62,44 @@ class _CadastroScreenState extends State<CadastroScreen> {
           child: Form(
             key: _formKey,
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.transparent,
-                    shadowColor: Colors.transparent,
-                    elevation: 0,
-                    padding: EdgeInsets.zero,
-                  ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: const [
-                      Icon(Icons.chevron_left, color: Colors.black),
-                      SizedBox(width: 5),
-                      Text(
-                        "Voltar",
-                        style: TextStyle(color: Colors.black),
-                      ),
-                    ],
+                // Botão voltar
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.transparent,
+                      shadowColor: Colors.transparent,
+                      elevation: 0,
+                      padding: EdgeInsets.zero,
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: const [
+                        Icon(Icons.chevron_left, color: Colors.black),
+                        SizedBox(width: 5),
+                        Text(
+                          "Voltar",
+                          style: TextStyle(color: Colors.black),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
-                const Spacer(flex: 4),
+                const SizedBox(height: 20),
+                // Adicionando imagem no topo
+                Image.asset(
+                  'assets/images/login.png', // Substitua pelo caminho da imagem
+                  height: 120,
+                  width: 120,
+                  fit: BoxFit.cover,
+                ),
+                const SizedBox(height: 20),
+                // Campo de Nome
                 TextFormField(
                   decoration: InputDecoration(
                     hintText: "Digite seu nome",
@@ -101,9 +112,11 @@ class _CadastroScreenState extends State<CadastroScreen> {
                     ),
                   ),
                   onSaved: (value) => _user.name = value!,
-                  validator: (value) => value!.isEmpty ? "Nome é obrigatório" : null,
+                  validator: (value) =>
+                      value!.isEmpty ? "Nome é obrigatório" : null,
                 ),
                 const SizedBox(height: 15),
+                // Campo de Email
                 TextFormField(
                   decoration: InputDecoration(
                     hintText: "Digite seu email",
@@ -116,9 +129,11 @@ class _CadastroScreenState extends State<CadastroScreen> {
                     ),
                   ),
                   onSaved: (value) => _user.email = value!,
-                  validator: (value) => value!.isEmpty ? "Email é obrigatório" : null,
+                  validator: (value) =>
+                      value!.isEmpty ? "Email é obrigatório" : null,
                 ),
                 const SizedBox(height: 15),
+                // Campo de Telefone
                 TextFormField(
                   decoration: InputDecoration(
                     hintText: "Digite seu telefone",
@@ -131,9 +146,11 @@ class _CadastroScreenState extends State<CadastroScreen> {
                     ),
                   ),
                   onSaved: (value) => _user.phone = value!,
-                  validator: (value) => value!.isEmpty ? "Telefone é obrigatório" : null,
+                  validator: (value) =>
+                      value!.isEmpty ? "Telefone é obrigatório" : null,
                 ),
                 const SizedBox(height: 15),
+                // Campo de Senha
                 TextFormField(
                   obscureText: true,
                   controller: _passwordController,
@@ -147,10 +164,11 @@ class _CadastroScreenState extends State<CadastroScreen> {
                       ),
                     ),
                   ),
-                  onSaved: (value) => _user.password = value!,
-                  validator: (value) => value!.isEmpty ? "Senha é obrigatória" : null,
+                  validator: (value) =>
+                      value!.isEmpty ? "Senha é obrigatória" : null,
                 ),
                 const SizedBox(height: 15),
+                // Campo de Confirmação de Senha
                 TextFormField(
                   obscureText: true,
                   controller: _confirmpasswordController,
@@ -174,7 +192,8 @@ class _CadastroScreenState extends State<CadastroScreen> {
                     return null;
                   },
                 ),
-                const Spacer(flex: 1),
+                const SizedBox(height: 20),
+                // Botão Cadastrar
                 Center(
                   child: ElevatedButton(
                     onPressed: _registerUser,
@@ -192,7 +211,6 @@ class _CadastroScreenState extends State<CadastroScreen> {
                     ),
                   ),
                 ),
-                const Spacer(flex: 4),
               ],
             ),
           ),
