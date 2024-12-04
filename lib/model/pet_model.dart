@@ -26,11 +26,18 @@ class PetModel {
     );
   }
 
-  // Método para retornar a URL da imagem principal (primeira imagem na lista)
+  // Método para retornar a URL da imagem principal (primeira imagem na lista ou aleatória)
   String get imageUrl {
-    return images.isNotEmpty
-        ? images[0]
-        : ''; // Se houver imagens, usa a primeira
+    if (images.isNotEmpty) {
+      return images[0];
+    }
+    // Imagem aleatória ou padrão caso a lista de imagens esteja vazia
+    List<String> defaultImages = [
+      'https://caesegatos.com.br/wp-content/uploads/2023/03/gato-mestico-preto-e-branco-e-um-cao-feliz-border-collie-ofegante-sobre-fundo-azul.jpg',
+      'https://caesegatos.com.br/wp-content/uploads/2023/03/gato-mestico-preto-e-branco-e-um-cao-feliz-border-collie-ofegante-sobre-fundo-azul.jpg',
+      'https://caesegatos.com.br/wp-content/uploads/2023/03/gato-mestico-preto-e-branco-e-um-cao-feliz-border-collie-ofegante-sobre-fundo-azul.jpg',
+    ];
+    return defaultImages[DateTime.now().millisecond % defaultImages.length];
   }
 
   // A descrição do animal pode ser uma string fixa ou nula, dependendo do seu caso

@@ -43,7 +43,7 @@ class PetCardScreen extends StatelessWidget {
               child: Image.network(
                 dog.images.isNotEmpty
                     ? dog.images[0]
-                    : "assets/images/default.png", // Exibe a primeira imagem
+                    : "https://i.sstatic.net/6M513.png", // Exibe a primeira imagem
                 fit: BoxFit.cover,
                 width: double.infinity,
                 height: 130,
@@ -63,4 +63,5 @@ class PetCardScreen extends StatelessWidget {
       ),
     );
   }
+  
 }
