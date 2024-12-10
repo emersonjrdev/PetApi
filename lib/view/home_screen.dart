@@ -7,70 +7,54 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        body: Padding(
+    return Scaffold(
+      body: SafeArea(
+        child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Align(
                 alignment: Alignment.topRight,
-                child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => const LoginScreen()));
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.transparent,
-                    shadowColor: Colors.transparent,
-                    elevation: 0,
+                child: TextButton.icon(
+                  onPressed: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (_) => const LoginScreen()),
                   ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(
-                        "Login",
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 16,
-                        ),
-                      ),
-                      SizedBox(width: 5),
-                      Icon(
-                        Icons.chevron_right,
-                        color: Colors.black,
-                      ),
-                    ],
+                  style: TextButton.styleFrom(
+                    padding: EdgeInsets.zero,
+                    foregroundColor: Colors.black,
                   ),
+                  icon: const Icon(Icons.chevron_right),
+                  label: const Text("Login"),
                 ),
               ),
-              const SizedBox(height: 20),
+              const Spacer(flex: 2),
               Image.asset(
                 "assets/images/pet.png",
                 height: 250,
               ),
-              const SizedBox(height: 20),
+              const Spacer(),
               const Text(
                 "Adote seu Aumigo!",
+                textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 28,
                   fontWeight: FontWeight.bold,
                   color: Colors.black,
                 ),
               ),
-              const SizedBox(height: 10),
-              const Spacer(),
+              const Spacer(flex: 3),
               ElevatedButton(
-                onPressed: () {
-                  Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => const CadastroScreen()));
-                },
+                onPressed: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => const CadastroScreen()),
+                ),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.black,
                   padding: const EdgeInsets.symmetric(
                     horizontal: 50,
-                    vertical: 20,
+                    vertical: 15,
                   ),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(30),
@@ -78,13 +62,10 @@ class HomeScreen extends StatelessWidget {
                 ),
                 child: const Text(
                   "Iniciar",
-                  style: TextStyle(
-                    fontSize: 18,
-                    color: Colors.white,
-                  ),
+                  style: TextStyle(fontSize: 18, color: Colors.white),
                 ),
               ),
-              const SizedBox(height: 30),
+              const SizedBox(height: 20),
             ],
           ),
         ),
