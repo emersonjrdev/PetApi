@@ -14,19 +14,43 @@ class PetsScreen extends StatefulWidget {
 }
 
 class _PetsScreenState extends State<PetsScreen> {
-  late Future<List<PetModel>> pets;
+  List<PetModel> pets = [];
+  int currentPage = 1;
+  bool isLoading = false;
+  bool hasMore = true;
 
   @override
   void initState() {
     super.initState();
-    _loadPets(); // Carregar os pets ao iniciar
+    _loadPets();
   }
 
-  void _loadPets() {
-    pets = PetController().fetchPets();
+  Future<void> _loadPets() async {
+    if (isLoading || !hasMore) return;
+
+    setState(() => isLoading = true);
+
+    try {
+      // Aguarda o resultado da função assíncrona fetchPets
+      List<PetModel> newPets =
+          await PetController().fetchPets(page: currentPage, limit: 10);
+
+      setState(() {
+        pets.addAll(newPets);
+        currentPage++;
+        hasMore =
+            newPets.isNotEmpty; // Verifica se há mais pets a serem carregados
+      });
+    } catch (error) {
+      // Exibe um erro amigável ao usuário
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Erro ao carregar os pets: $error')),
+      );
+    } finally {
+      setState(() => isLoading = false);
+    }
   }
 
-  // Função de logout
   void _logout() {
     Navigator.pushAndRemoveUntil(
       context,
@@ -37,7 +61,6 @@ class _PetsScreenState extends State<PetsScreen> {
     );
   }
 
-  // Estilo customizado para botões
   ButtonStyle _customButtonStyle() {
     return ElevatedButton.styleFrom(
       backgroundColor: Colors.transparent,
@@ -61,8 +84,8 @@ class _PetsScreenState extends State<PetsScreen> {
           automaticallyImplyLeading: false,
           actions: [
             IconButton(
-              icon: const Icon(Icons.exit_to_app), // Ícone de saída
-              onPressed: _logout, // Chama a função de logout
+              icon: const Icon(Icons.exit_to_app),
+              onPressed: _logout,
             ),
           ],
         ),
@@ -78,8 +101,10 @@ class _PetsScreenState extends State<PetsScreen> {
                       await Navigator.of(context).push(MaterialPageRoute(
                         builder: (context) => AddPetScreen(),
                       ));
-                      // Atualiza a lista de pets ao retornar
                       setState(() {
+                        pets.clear();
+                        currentPage = 1;
+                        hasMore = true;
                         _loadPets();
                       });
                     },
@@ -96,77 +121,40 @@ class _PetsScreenState extends State<PetsScreen> {
                       ));
                     },
                     style: _customButtonStyle(),
-                    child: const Row(
-                      children: [
-                        Text(
-                          "Meus Pets",
-                          style: TextStyle(color: Colors.grey),
-                        ),
-                        SizedBox(width: 5),
-                      ],
+                    child: const Text(
+                      "Meus Pets",
+                      style: TextStyle(color: Colors.grey),
                     ),
                   ),
                 ],
               ),
               const SizedBox(height: 20),
               Expanded(
-                child: FutureBuilder<List<PetModel>>(
-                  future: pets,
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const Center(child: CircularProgressIndicator());
-                    } else if (snapshot.hasError) {
-                      return Center(
-                        child: Text(
-                          'Não foi possível carregar os pets. Tente novamente mais tarde.',
-                          textAlign: TextAlign.center,
-                          style: const TextStyle(
-                            fontSize: 18,
-                            color: Colors.grey,
-                          ),
-                        ),
-                      );
-                    } else if (snapshot.hasData && snapshot.data!.isEmpty) {
-                      return const Center(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(Icons.pets, size: 100, color: Colors.grey),
-                            SizedBox(height: 20),
-                            Text(
-                              'Nenhum pet encontrado.',
-                              style: TextStyle(
-                                fontSize: 18,
-                                color: Colors.grey,
-                              ),
-                            ),
-                          ],
-                        ),
-                      );
-                    } else if (snapshot.hasData) {
-                      List<PetModel> petList = snapshot.data!;
-                      return GridView.builder(
-                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2,
-                          crossAxisSpacing: 5,
-                          mainAxisSpacing: 5,
-                          childAspectRatio: MediaQuery.of(context).size.width >
-                                  600
-                              ? 1.2
-                              : 0.785, // Ajusta o aspecto dependendo do tamanho da tela
-                        ),
-                        itemCount: petList.length,
-                        itemBuilder: (context, index) {
-                          return PetCardScreen(dog: petList[index]);
-                        },
-                      );
-                    } else {
-                      return const Center(
-                          child: Text('Nenhum pet encontrado.'));
-                    }
+                child: GridView.builder(
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    crossAxisSpacing: 5,
+                    mainAxisSpacing: 5,
+                    childAspectRatio:
+                        MediaQuery.of(context).size.width > 600 ? 1.2 : 0.785,
+                  ),
+                  itemCount: pets.length,
+                  itemBuilder: (context, index) {
+                    return PetCardScreen(dog: pets[index]);
                   },
                 ),
               ),
+              if (isLoading)
+                const Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: CircularProgressIndicator(),
+                ),
+              if (hasMore && !isLoading)
+                ElevatedButton(
+                  onPressed: _loadPets,
+                  style: _customButtonStyle(),
+                  child: const Text("Carregar Mais"),
+                ),
             ],
           ),
         ),
